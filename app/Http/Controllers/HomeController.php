@@ -19,12 +19,23 @@ class HomeController extends Controller
         if ($request->ajax()){
             return Datatables::of($users)
                 ->addIndexColumn()
-                ->addColumn('action', function (){
-                    $btn= '<button type="button" class="btn btn-primary btn-sm ">Update</button>  <button type="button" class="btn btn-danger btn-sm">Delete</button>';
+                ->addColumn('action', function ($row){
+                    $btn= '<button type="button" class="btn btn-primary btn-sm" data-id="'.$row->id.'">Update</button>  <button type="button" class="btn btn-danger btn-sm">Delete</button>';
                     return $btn;
                 })
                 ->make(true);
         }
         return view('home');
     }
+
+    public function store(Request $request){
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt('1234')
+        ]);
+        return redirect()->back();
+    }
+
+
 }
